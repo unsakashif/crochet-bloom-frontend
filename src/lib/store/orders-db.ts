@@ -14,7 +14,11 @@ import {
 } from "@/lib/store/types";
 import { hashCustomerPassword, verifyCustomerPassword } from "@/lib/store/customer-auth";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+/** On Vercel the project FS is read-only; persist demo store under /tmp. */
+const DATA_DIR =
+  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+    ? path.join("/tmp", "crochet-bloom-data")
+    : path.join(process.cwd(), "data");
 const STORE_PATH = path.join(DATA_DIR, "store.json");
 
 let writeChain: Promise<unknown> = Promise.resolve();
